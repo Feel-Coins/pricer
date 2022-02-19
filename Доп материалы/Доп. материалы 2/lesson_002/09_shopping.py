@@ -85,3 +85,5 @@ magnet_values = [
     list(shops_magnet[2].values())
     ]
 print(magnet_values)
+
+#ПРОВЕРКА
