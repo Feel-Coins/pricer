@@ -46,9 +46,20 @@ sweets = {
     ],
     'пирожное': [
         {'shop': 'ашан', 'price': 67.99},
-        {'shop': 'пятерочка', 'price': 59.99},
-        {'shop': 'магнит', 'price': 62.99}
+        {'shop': 'пятерочка', 'price2': 59.99},
+        {'shop': 'магнит', 'price3': 62.99}
     ]
 }
+sweets_list = sweets.get('пирожное')
+print(sweets_list)
+# [{'shop': 'ашан', 'price': 67.99}, {'shop': 'пятерочка', 'price2': 59.99}, {'shop': 'магнит', 'price3': 62.99}]
+
+
+# Пирожные
+pie_auchan = list(sweets_list[0].values())
+pie_5 = list(sweets_list[1].values())
+pie_magnet = list(sweets_list[2].values())
+
+print('пирожные:', pie_auchan, pie_5, pie_magnet)
 # Указать надо только по 2 магазина с минимальными ценами
 
