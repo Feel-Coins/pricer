@@ -60,6 +60,13 @@ pie_auchan = list(sweets_list[0].values())
 pie_5 = list(sweets_list[1].values())
 pie_magnet = list(sweets_list[2].values())
 
-print('пирожные:', pie_auchan, pie_5, pie_magnet)
+print('пирожные:', pie_5, pie_magnet, pie_auchan, '\n')
+
 # Указать надо только по 2 магазина с минимальными ценами
 
+#                       ПОПРОБУЙ СДЕЛАТЬ НА ПРИМЕРЕ ЗАДАНИЯ 10!!!
+
+shops_auchan = shops['ашан']
+print(shops_auchan)
+auchan_values = [list(shops_auchan[0].values()), list(shops_auchan[1].values()), list(shops_auchan[2].values())]
+print(auchan_values)
