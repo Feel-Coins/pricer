@@ -67,6 +67,21 @@ print('пирожные:', pie_5, pie_magnet, pie_auchan, '\n')
 #                       ПОПРОБУЙ СДЕЛАТЬ НА ПРИМЕРЕ ЗАДАНИЯ 10!!!
 
 shops_auchan = shops['ашан']
-print(shops_auchan)
 auchan_values = [list(shops_auchan[0].values()), list(shops_auchan[1].values()), list(shops_auchan[2].values())]
 print(auchan_values)
+
+shops_pyatorochka = shops['пятерочка']
+pyatorochka_values = [
+    list(shops_pyatorochka[0].values()),\
+    list(shops_pyatorochka[1].values()),\
+    list(shops_pyatorochka[2].values())
+    ]
+print(pyatorochka_values)
+
+shops_magnet = shops['магнит']
+magnet_values = [
+    list(shops_magnet[0].values()),\
+    list(shops_magnet[1].values()),\
+    list(shops_magnet[2].values())
+    ]
+print(magnet_values)
