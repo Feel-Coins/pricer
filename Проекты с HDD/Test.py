@@ -1,4 +1,4 @@
-number = int(input('input the number: '))
+number = int(input('input the integer number: '))
 len_numb = len(str(number))
 math = []
 for i in str(number):
@@ -16,6 +16,9 @@ for i in math:
     if math.index(i) != len(math)-1:
         count += ' + '
 
-print(count)
+if count == '':
+    print("ZERO")
+else:
+    print(count)
 
 
