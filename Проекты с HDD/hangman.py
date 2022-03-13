@@ -1007,16 +1007,21 @@ copied_list = '''
 1001  	обработка	52.4	2253	
 1002  	чемпионат	52.4	2254
 '''
+
 splited_list = copied_list.split()
+
 list_of_words = []
-for elem_of_split_list in splited_list:
-    if elem_of_split_list.isalpha():
-        list_of_words.append(elem_of_split_list)
+for elem in splited_list:
+    if elem.isalpha():
+        list_of_words.append(elem)
     else:
         continue
 
 random_word = random.choice(list_of_words)
 print(random_word)
+
+
+list_of_inp_let = []
 
 
 def letter(inp_let):
@@ -1040,10 +1045,11 @@ def game_engine():
     inp_let = input("Введите букву: ")
     if inp_let.isalpha():
         if inp_let in random_word:
+            list_of_inp_let.append(inp_let)
             letter(inp_let)
         else:
-             return "Нет такой буквы!"
+             print("Нет такой буквы!")
     else:
-        return "Это не буква!!!"
+        print("Это не буква!!!")
 
 game_engine()
