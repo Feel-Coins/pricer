@@ -1,3 +1,6 @@
+#Hangman_game
+import random
+
 copied_list = '''
 год	3727.5	28	
 2  	человек	2723.0	39	
@@ -1009,4 +1012,18 @@ for i in splited_list:
         list_of_words.append(i)
     else:
         continue
-print(list_of_words)
+
+choosed_word = random.choice(list_of_words)
+
+letters = []
+for i in choosed_word:
+    if i == choosed_word[0]:
+        letters.append(i)
+    elif i == choosed_word[len(choosed_word)-1]:
+        letters.append(i)
+    else:
+        letters.append("*")
+
+
+
+print(letters)
