@@ -1018,7 +1018,7 @@ choosed_word = random.choice(list_of_words)
 letters = []
 for i in choosed_word:
     if i == choosed_word[0]:
-        letters.append(i)
+        letters.append(i.upper())
     elif i == choosed_word[len(choosed_word)-1]:
         letters.append(i)
     else:
@@ -1026,4 +1026,4 @@ for i in choosed_word:
 
 
 
-print(letters)
+print('Слово:\n',"".join(letters))
