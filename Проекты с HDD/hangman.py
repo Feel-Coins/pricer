@@ -1,5 +1,7 @@
-#Hangman_game
+# Hangman_game
 import random
+
+HP = 3
 
 copied_list = '''
 год	3727.5	28	
@@ -1007,23 +1009,41 @@ copied_list = '''
 '''
 splited_list = copied_list.split()
 list_of_words = []
-for i in splited_list:
-    if i.isalpha():
-        list_of_words.append(i)
+for elem_of_split_list in splited_list:
+    if elem_of_split_list.isalpha():
+        list_of_words.append(elem_of_split_list)
     else:
         continue
 
-choosed_word = random.choice(list_of_words)
+random_word = random.choice(list_of_words)
+print(random_word)
 
-letters = []
-for i in choosed_word:
-    if i == choosed_word[0]:
-        letters.append(i.upper())
-    elif i == choosed_word[len(choosed_word)-1]:
-        letters.append(i)
+
+def letter(inp_let):
+    letters = []
+    for alfa in random_word:
+        if alfa == random_word[0]:
+            letters.append(alfa)
+        elif alfa == random_word[len(random_word) - 1]:
+            letters.append(alfa)
+        elif alfa == random_word[random_word.index(inp_let)]:
+            letters.append(alfa)
+        else:
+            letters.append("*")
+    return print('Слово:\n', "".join(letters))
+
+
+letter(random_word[0])
+
+
+def game_engine():
+    inp_let = input("Введите букву: ")
+    if inp_let.isalpha():
+        if inp_let in random_word:
+            letter(inp_let)
+        else:
+             return "Нет такой буквы!"
     else:
-        letters.append("*")
+        return "Это не буква!!!"
 
-
-
-print('Слово:\n',"".join(letters))
+game_engine()
