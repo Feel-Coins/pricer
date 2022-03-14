@@ -1,7 +1,7 @@
 # Hangman_game
 import random
 
-HP = 3
+# Preparing the word
 
 copied_list = '''
 год	3727.5	28	
@@ -1020,36 +1020,64 @@ for elem in splited_list:
 random_word = random.choice(list_of_words)
 print(random_word)
 
+#Engine
 
-list_of_inp_let = []
+list_of_checked_letters = [random_word[0], random_word[len(random_word) - 1], ]
+list_of_opened_letters = []
+
+HP = 3
 
 
-def letter(inp_let):
-    letters = []
-    for alfa in random_word:
-        if alfa == random_word[0]:
-            letters.append(alfa)
-        elif alfa == random_word[len(random_word) - 1]:
-            letters.append(alfa)
-        elif alfa == random_word[random_word.index(inp_let)]:
-            letters.append(alfa)
+def letters():
+    global list_of_checked_letters
+    global list_of_opened_letters
+    list_of_opened_letters = []
+    for letter in random_word:
+        if letter in list_of_checked_letters:
+            list_of_opened_letters.append(letter)
         else:
-            letters.append("*")
-    return print('Слово:\n', "".join(letters))
+            list_of_opened_letters.append("*")
+    return print('Слово:\n', "".join(list_of_opened_letters))
 
 
-letter(random_word[0])
+
+letters()
 
 
 def game_engine():
     inp_let = input("Введите букву: ")
     if inp_let.isalpha():
         if inp_let in random_word:
-            list_of_inp_let.append(inp_let)
-            letter(inp_let)
+            list_of_checked_letters.append(inp_let)
+            letters()
         else:
-             print("Нет такой буквы!")
+            print("Нет такой буквы!")
+            global HP
+            HP -= 1
+            letters()
     else:
         print("Это не буква!!!")
+        HP -= 1
+        letters()
 
-game_engine()
+
+#cycle with condition of win\lose
+
+while set(list_of_opened_letters) != set(list_of_checked_letters):
+    if HP > 0:
+        game_engine()
+    else:
+        print("""
+        
+░░░░░░░░░░░░░░░░░░░░░░░██████╗░░█████╗░███╗░░░███╗███████╗░░░░░░░░░█████╗░██╗░░░██╗███████╗██████╗░░░░░░░░░░░░░░░░░░░░░░░░░░░
+░░░░░░░░░░░░░░░░░░░░░░██╔════╝░██╔══██╗████╗░████║██╔════╝░░░░░░░░██╔══██╗██║░░░██║██╔════╝██╔══██╗░░░░░░░░░░░░░░░░░░░░░░░░░░
+░░░░░░░░░░░░░░░░░░░░░░██║░░██╗░███████║██╔████╔██║█████╗░░░░░░░░░░██║░░██║╚██╗░██╔╝█████╗░░██████╔╝░░░░░░░░░░░░░░░░░░░░░░░░░░
+░░░░░░░░░░░░░░░░░░░░░░██║░░╚██╗██╔══██║██║╚██╔╝██║██╔══╝░░░░░░░░░░██║░░██║░╚████╔╝░██╔══╝░░██╔══██╗░░░░░░░░░░░░░░░░░░░░░░░░░░
+░░░░░░░░░░░░░░░░░░░░░░╚██████╔╝██║░░██║██║░╚═╝░██║███████╗░░░░░░░░╚█████╔╝░░╚██╔╝░░███████╗██║░░██║░░░░░░░░░░░░░░░░░░░░░░░░░░
+░░░░░░░░░░░░░░░░░░░░░░░╚═════╝░╚═╝░░╚═╝╚═╝░░░░░╚═╝╚══════╝░░░░░░░░░╚════╝░░░░╚═╝░░░╚══════╝╚═╝░░╚═╝░░░░░░░░░░░░░░░░░░░░░░░░░░
+        
+        
+        
+        """)
+        break
+
