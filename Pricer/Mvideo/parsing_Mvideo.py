@@ -1,6 +1,5 @@
 #scraper
 import json
-
 import requests
 
 
@@ -165,12 +164,70 @@ def get_data():
 
     response = requests.post('https://www.mvideo.ru/bff/product-details/list', cookies=cookies, headers=headers,
                              json=json_data).json()
-    print(response)
-    with open('item.json', 'w') as file:
+
+    with open('../1_item.json', 'w') as file:
         json.dump(response, file, indent=4, ensure_ascii=False)
+
+    products_ids_str = ','.join(products_ids)
+
+    params = {
+        'productIds': products_ids_str,
+        'addBonusRubles': 'true',
+        'isPromoApplied': 'true',
+    }
+
+    response = requests.get('https://www.mvideo.ru/bff/products/prices', params=params, cookies=cookies,
+                            headers=headers).json()
+
+    with open('../2_prices.json', 'w') as file:
+        json.dump(response, file, indent=4, ensure_ascii=False)
+
+    items_prices = {}
+
+    material_prices = response.get('body').get('materialPrices')
+
+    for elem in material_prices:
+        item_id = elem.get('price').get('productId')
+        item_base_price = elem.get('price').get('basePrice')
+        item_sale_price = elem.get('price').get('salePrice')
+        item_bonus = elem.get('bonusRubles').get('total')
+
+        items_prices[item_id] = {
+            'item_basePrice': item_base_price,
+            'item_salePrice': item_sale_price,
+            'item_bonus': item_bonus
+        }
+
+    with open('../3_items_&_prices.json', 'w') as file:
+        json.dump(items_prices, file, indent=4, ensure_ascii=False)
+
+
+def get_result():
+
+    with open('../1_item.json') as file:
+        products_data = json.load(file)
+
+    with open('../3_items_&_prices.json') as file:
+        products_prices = json.load(file)
+
+    products_data = products_data.get('body').get('products')
+
+    for item in products_data:
+        products_id = item.get('productId')
+
+        if products_id in products_prices:
+            prices = products_prices[products_id]
+
+        item['item_base_price'] = prices.get('item_basePrice')
+        item['item_sale_price'] = prices.get('item_salePrice')
+        item['item_bonus'] = prices.get('item_bonus')
+
+    with open('../4_result.json', 'w') as file:
+        json.dump(products_data, file, indent=4, ensure_ascii=False)
 
 def main():
     get_data()
+    get_result()
 
 if __name__ == '__main__':
     main()
