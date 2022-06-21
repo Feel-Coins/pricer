@@ -1,5 +1,4 @@
 # scraper for DNS-shop
-import json
 import requests
 from bs4 import BeautifulSoup
 from fake_useragent import  UserAgent
