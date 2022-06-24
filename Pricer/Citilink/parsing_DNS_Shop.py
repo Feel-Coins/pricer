@@ -1,4 +1,5 @@
 # scraper for DNS-shop
+import json
 import requests
 from bs4 import BeautifulSoup
 from fake_useragent import UserAgent
@@ -17,20 +18,28 @@ def get_data(city_code = 'nvs_cl%3A'):
 
     response = requests.get(url='https://www.citilink.ru/catalog/videokarty/', headers=headers, cookies=cookies)
 
-    with open('data.json', 'w') as file:
-        file.write(response.text)
+    # with open('data.json', 'w') as file:
+    #     file.write(response.text)
 
     with open('data.json') as file:
         src = file.read()
 
     soup = BeautifulSoup(src, 'lxml')
     cards = soup.find_all('a', class_='ProductCardHorizontal__title')
+    current_prices = soup.find_all('span', class_='ProductCardHorizontal__price_current-price')
 
-    for card in cards:
-        card_title = card.text.strip()
-
+    prod = {}
+    i, j = 0, 0
+    while len(prod) < len(cards):
+        card = cards[i].text.strip()
+        i += 1
+        price = current_prices[j].text.strip()
+        j += 1
+        prod[card] = price
     with open('titles.json', 'w') as file:
-        file.write(card_title.text)
+        json.dump(prod, file, indent=4, ensure_ascii=False)
+
+
 
 
 
