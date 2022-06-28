@@ -1,8 +1,9 @@
-# scraper for DNS-shop
-import json
+# scraper for citilink.ru
 import requests
+import json
 from bs4 import BeautifulSoup
 from fake_useragent import UserAgent
+
 
 def get_data(city_code = 'nvs_cl%3A'):
     ua = UserAgent()
@@ -28,19 +29,28 @@ def get_data(city_code = 'nvs_cl%3A'):
     cards = soup.find_all('a', class_='ProductCardHorizontal__title')
     current_prices = soup.find_all('span', class_='ProductCardHorizontal__price_current-price')
 
-    prod = {}
-    i, j = 0, 0
-    while len(prod) < len(cards):
-        card = cards[i].text.strip()
-        i += 1
-        price = current_prices[j].text.strip()
-        j += 1
-        prod[card] = price
-    with open('titles.json', 'w') as file:
-        json.dump(prod, file, indent=4, ensure_ascii=False)
+    cards = list(cards)
+    current_prices = list(current_prices)
+    print(cards)
+    print(current_prices)
+    print(len(cards))
+    print(len(current_prices))
 
+    card_list = []
+    price_list = []
 
+    for card in cards:
+        card = card.text.strip()
+        card_list.append(card)
+    for price in current_prices:
+        price = price.text.strip()
+        price_list.append(price)
 
+    print(len(card_list), len(price_list))
+    result = dict(zip(card_list, price_list))
+
+    with open('result.json', 'w') as file:
+        json.dump(result, file, indent=4, ensure_ascii=False)
 
 
 def main():
