@@ -1,10 +1,11 @@
 # scraper for citilink.ru
 import requests
 import re
-import json
+# import json
 from bs4 import BeautifulSoup
 from fake_useragent import UserAgent
-
+import psycopg2
+import datetime
 
 page = 1
 device = ['processory', 'videokarty', 'materinskie-platy', 'moduli-pamyati', 'bloki-pitaniya', 'korpusa']
@@ -12,9 +13,18 @@ device_counter = 0
 data_page = 0
 # 'processory', 'videokarty', 'materinskie-platy', , 'bloki-pitaniya', 'korpusa'
 
+# creating database
+date_string = datetime.datetime.now()
+now = str(date_string.strftime('%d%m%y%H%M'))
+connection = psycopg2.connect('dbname=Pricer user=postgres')
+cursor = connection.cursor()
+cursor.execute(f'create table '
+               f'citilink_{now}(id serial primary key, class varchar, product_name varchar, price varchar, link varchar);')
+connection.commit()
+
 
 def get_data(city_code='nvs_cl%3A'):
-    global data_page, device_counter, device
+    global data_page, device_counter, device, now, connection, cursor
     ua = UserAgent()
 
     #get response
@@ -85,12 +95,19 @@ def get_data(city_code='nvs_cl%3A'):
 
     #collecting progress in dict and writing to file
     result = dict(zip(card_list, price_list))
-    with open(f' citilinks {device[device_counter]}.json', 'a') as file:
-        json.dump(result, file, indent=4, ensure_ascii=False)
+    # with open(f' citilinks {device[device_counter]}.json', 'a') as file:
+    #     json.dump(result, file, indent=4, ensure_ascii=False)
+
+    for prod, price in result.items():
+        cursor.execute(f'insert into citilink_{now}(product_name, price, class) values (%s, %s, %s)',
+                       (prod, price, device[device_counter]))
+
+
 
 
 def main():
     global page, device_counter, data_page
+
 
     #walking on products and getting data from all pages
     while device_counter != len(device):
@@ -102,6 +119,9 @@ def main():
         device_counter += 1
     print('Parcing complete!')
 
+    connection.commit()
+    cursor.close()
+    connection.close()
 
 if __name__ == '__main__':
     main()
