@@ -16,16 +16,19 @@ for row in rows:
 latest_dt = max(dt_list)
 print(f'connected to {latest_dt}\n')
 
+
 #searching by product_name
 def searching(prod):
-    cursor.execute(f'SELECT product_name, price, link FROM {latest_dt} WHERE Product_name LIKE \'%{prod}%\';')
-    request = f'SELECT product_name, price, link FROM {latest_dt} WHERE Product_name LIKE \'%{prod}%\';'
+    cursor.execute(f'SELECT product_name, price, link FROM {latest_dt} WHERE UPPER (Product_name) LIKE '
+                   f'UPPER (\'%{prod}%\') ORDER BY price ASC;')
+    request = f'SELECT product_name, price, link FROM {latest_dt} WHERE UPPER (Product_name) LIKE '\
+              f'UPPER (\'%{prod}%\') ORDER BY price ASC;'
     print(request)
 
-    for row in cursor.fetchall():
-        print("\nname =", row[0], )
-        print("price =", row[1])
-        print("link =", row[2])
+    for data in cursor.fetchall():
+        print("\nname =", data[0], )
+        print("price =", data[1])
+        print("link =", data[2])
 
 
 searching(prod=str(input('please input searching product name (example: RTX3050 / i5 11400): ')))
