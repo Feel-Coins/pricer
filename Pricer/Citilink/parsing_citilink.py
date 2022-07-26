@@ -1,4 +1,5 @@
 # scraper for citilink.ru
+from time import sleep
 import requests
 import re
 # import json
@@ -6,6 +7,24 @@ from bs4 import BeautifulSoup
 from fake_useragent import UserAgent
 import psycopg2
 import datetime
+
+print("""
+                                           ,,,,,,,,,,,,,,,                                          
+                                     ╒█▀▐▐▐▐▐▐▐▐▐▐▐▐▐▐▐▐▐▐▀█                                         
+                                     ▐█    ╒███╕           █   
+                                     ▐█     ███╕           █                                      
+                                     ▐█    ▀████                                                     
+                                     ▐█  ,,█████████████,  █                                         
+                                      ████▀██         "██▌██                                         
+                                         ╙█▄           ██                                            
+                                           ▀█,,        █                                             
+                                             ▀▀████████╙                                             
+
+
+                    ██████▌ █   ▄██ ██████ █    ██   ██   ██   ██ ▄█    █ ▐█   ██                   
+                   ▀█     ▄ █ ██▀██   ██   █▄▄█▀▀█  ██ █▄ ██▄██ █ ███████▄▐█▐██                     
+                   ▐███████ ██   ▀█   ██   ██   ▐█ █    █▌██▀   █ ▀█    █ ▐█   ██ 
+""")
 
 page = 1
 # 'processory', 'videokarty', 'materinskie-platy', 'moduli-pamyati', 'bloki-pitaniya', 'korpusa'
@@ -115,6 +134,8 @@ def get_data(city_code='nvs_cl%3A'):
         cursor.execute(f'insert into citilink_{now_str}(product_name, price, class, link) values (%s, %s, %s, %s)',
                        (card[0], card[1], category_list[category_index], card[2]))
 
+    connection.commit()
+
 
 def main():
     global page, category_index, max_pages
@@ -127,7 +148,8 @@ def main():
             page += 1
         print('\n\n')
         category_index += 1
-    print('Parcing complete!')
+    print('Parcing complete! \nYou may close the window.')
+    sleep(300)
 
     connection.commit()
     cursor.close()

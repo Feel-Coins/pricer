@@ -30,10 +30,9 @@ print(f'founded dt: {latest_dt}\n')
 # searching by product_name
 def searching(prod):
     for i in latest_dt:
-        cursor.execute(f'SELECT product_name, price, link FROM {i} WHERE UPPER (Product_name) LIKE '
-                       f'UPPER (\'%{prod}%\') ORDER BY price ASC;')
         request = f'SELECT product_name, price, link FROM {i} WHERE UPPER (Product_name) LIKE '\
                   f'UPPER (\'%{prod}%\') ORDER BY price ASC;'
+        cursor.execute(request)
         print(request)
 
         for data in cursor.fetchall():
