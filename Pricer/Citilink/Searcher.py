@@ -1,39 +1,50 @@
 import psycopg2
 
-#searching latest citilink table in DB
+# connecting to the DB
 connection = psycopg2.connect('dbname=Pricer user=postgres')
 cursor = connection.cursor()
+
+# exec all table info
 cursor.execute("SELECT * FROM pg_catalog.pg_tables")
-rows = cursor.fetchall()
-rows.sort()
-dt_list = []
-for row in rows:
-    if 'citilink_' in row[1]:
-        dt_list.append(row[1])
+tables = cursor.fetchall()
+tables.sort()
+
+# shop list
+shops = ['citilink_', 'onlinetrade_']
+
+# searching all shop tables
+dt_list_citilink = []
+dt_list_onlinetrade = []
+for table in tables:
+    if f'{shops[0]}' in table[1]:
+        dt_list_citilink.append(table[1])
+    elif f'{shops[1]}' in table[1]:
+        dt_list_onlinetrade.append(table[1])
     else:
         pass
 
-latest_dt = max(dt_list)
-print(f'connected to {latest_dt}\n')
+latest_dt = [max(dt_list_citilink), max(dt_list_onlinetrade)]
+print(f'founded dt: {latest_dt}\n')
 
 
-#searching by product_name
+# searching by product_name
 def searching(prod):
-    cursor.execute(f'SELECT product_name, price, link FROM {latest_dt} WHERE UPPER (Product_name) LIKE '
-                   f'UPPER (\'%{prod}%\') ORDER BY price ASC;')
-    request = f'SELECT product_name, price, link FROM {latest_dt} WHERE UPPER (Product_name) LIKE '\
-              f'UPPER (\'%{prod}%\') ORDER BY price ASC;'
-    print(request)
+    for i in latest_dt:
+        cursor.execute(f'SELECT product_name, price, link FROM {i} WHERE UPPER (Product_name) LIKE '
+                       f'UPPER (\'%{prod}%\') ORDER BY price ASC;')
+        request = f'SELECT product_name, price, link FROM {i} WHERE UPPER (Product_name) LIKE '\
+                  f'UPPER (\'%{prod}%\') ORDER BY price ASC;'
+        print(request)
 
-    for data in cursor.fetchall():
-        print("\nname =", data[0], )
-        print("price =", data[1])
-        print("link =", data[2])
+        for data in cursor.fetchall():
+            print("\nname =", data[0], )
+            print("price =", data[1])
+            print("link =", data[2])
 
 
 searching(prod=str(input('please input searching product name (example: RTX3050 / i5 11400): ')))
 
 
-#closing all
+# closing all
 cursor.close()
 connection.close()
